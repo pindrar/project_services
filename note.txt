@@ -1,0 +1,4 @@
+1. buat approv dan pengelompokan fpr di buat berdasarkan nama projek
+2. fpr sent di kumpulin dalam satu from, dan nanti di kelompokkan berdasaarkan project
+3. susurh buat halaman utama yang berisi menu/modul2 yang akan di buat. karna akan di persentasikan/ disosialisasikan ke directur.
+4. buat tampilan untuk yang sudah approv dan yang belum.
