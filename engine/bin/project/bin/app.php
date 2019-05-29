@@ -34,7 +34,7 @@ function render($opt,$val,$page) {
 		case 'remove':
 			removeData($val);
 			break;
-		
+
 		default:
 			viewData($page);
 			break;
@@ -50,9 +50,9 @@ function viewData($page) {
 	while ($data = fetchQuery($receiveData)) {
 		echo "<tr>";
 		echo "<td>".($num)."</td>";
-		echo "<td><a href=".BASE_URL."/fpr/key-".$data['id'].">".$data['project_name']."</a></td>"; //==Edit this for custom href
 		echo "<td>".$data['no_project']."</td>";
-		
+		echo "<td><a href=".BASE_URL."/fpr/key-".$data['id'].">".$data['project_name']."</a></td>"; //==Edit this for custom href
+
 		/** Tambah Kode nanti Untuk Role Premission **/
 		echo "<td><a href='".$_SERVER['REQUEST_URI']."/edit/".$data['id']."' class='option-icon'>Option</a></td>";
 		/** end **/
@@ -92,12 +92,13 @@ function addDataProcess($project_name,$no_project) {
 
 //===Generate Form to edit data in database
 function editData($val) {
-	$receiveData = query("SELECT * FROM `tb_project`");
+	$receiveData = query("SELECT * FROM `tb_project` where `id`=$val");
 	while ($data = fetchQuery($receiveData)) {
 		$id = $data['id'];
 		$project_name = $data['project_name'];
 		$no_project = $data['no_project'];
 	}
+
 	echo "
 		<form action='' method='POST' name='form-add'>
 			<div>
@@ -109,7 +110,7 @@ function editData($val) {
 			  	<input type='text' name='project_name' placeholder='Please fill this field with new project name' required value='".$project_name."'>
 			</div>
 			<div>
-				<input type='hidden' name='id_project' value='".$id."'> 
+				<input type='hidden' name='id_project' value='".$id."'>
 			  	<input type='submit' name='button_edit' value='Update this Project'>
 			  	<a href='".BASE_URL."/".base_path."/remove/".$id."' class='remove-link'>Remove</a>
 			</div>
@@ -131,7 +132,7 @@ function removeData($id_project) {
 	if($sendData){
 		redirect(base_path);
 	}
-}	
+}
 
 
 ?>

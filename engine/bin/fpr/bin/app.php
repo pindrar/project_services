@@ -27,7 +27,7 @@ if(isset($_POST['button_add']))
 addDataProcess($fpr_no,$date,$date_reqd,$division,$section,$area,$reqd_for,$id_project);
 
 if(isset($_POST['button_edit']))
-editDataProcess($fpr_no,$date,$date_reqd,$division,$section,$area,$reqd_for,$id_project);
+editDataProcess($fpr_no,$date,$date_reqd,$division,$section,$area,$reqd_for,$id_project,$val);
 
 //===This function called when website loaded
 function render($id_project,$opt,$val,$page) {
@@ -41,9 +41,9 @@ function render($id_project,$opt,$val,$page) {
 			break;
 
 		case 'remove':
-			removeData($val);
+			removeData($id_project,$val);
 			break;
-		
+
 		default:
 			viewData($id_project,$page);
 			break;
@@ -51,7 +51,7 @@ function render($id_project,$opt,$val,$page) {
 }
 
 //===View All Data
-function viewData($id_project,$page) {
+	function viewData($id_project,$page) {
 	$num = 1;
 	$receiveData = query("SELECT * FROM `tb_fpr` where `project_id` = $id_project");
 	echo "<table border='1'>";
@@ -75,7 +75,7 @@ function viewData($id_project,$page) {
 		echo "<td>".$data['section']."</td>";
 		echo "<td>".$data['area']."</td>";
 		echo "<td>".$data['reqd_for']."</td>";
-		
+
 		/** Tambah Kode nanti Untuk Role Premission **/
 		echo "<td><a href='".$_SERVER['REQUEST_URI']."/edit/".$data['id']."' class='option-icon'>Option</a></td>";
 		/** end **/
@@ -86,77 +86,120 @@ function viewData($id_project,$page) {
 	echo "<td><a href='".$_SERVER['REQUEST_URI']."/add' class='add-icon'>Add Data</a></td>";
 }
 
-///========Beloman
-
 //===Generate Form to insert new data to database
 function addData() {
 	echo "
 		<form action='' method='POST' name='form-add'>
 			<div>
-				<label>No. Project</label>
-		  		<input type='text' name='no_project' placeholder='Please fill this field with new project name' required autofocus>
+				<label>FPR No.</label>
+		  		<input type='text' name='fpr_no' placeholder='Please fill this field with New No FPR' required autofocus>
 			</div>
 			<div>
-				<label>Project Name</label>
-			  	<input type='text' name='project_name' placeholder='Please fill this field with new project name' required>
+				<label>Date</label>
+			  	<input type='date' name='date' placeholder='Please fill this field with Date' required>
 			</div>
 			<div>
-			  	<input type='submit' name='button_add' value='Create New Project'>
+				<label>Date ReqD</label>
+			  	<input type='date' name='date_reqd' placeholder='Please fill this field with Date ReqD' required>
+			</div>
+			<div>
+				<label>Division</label>
+			  	<input type='text' name='division' placeholder='Please fill this field with new Division' required>
+			</div>
+			<div>
+				<label>Section</label>
+			  	<input type='text' name='section' placeholder='Please fill this field with new Section' required>
+			</div>
+			<div>
+				<label>Area</label>
+			  	<input type='text' name='area' placeholder='Please fill this field with new Area' required>
+			</div>
+			<div>
+				<label>ReqD For</label>
+			  	<input type='text' name='reqd_for' placeholder='Please fill this field with new ReqD For' required>
+			</div>
+			<div>
+			  	<input type='submit' name='button_add' value='Create New Fpr'>
 			</div>
 		</form>
 	";
 }
 
 //===Process of insert new data to database
-function addDataProcess($project_name,$no_project) {
-	$sendData = query("INSERT INTO `tb_project`(`id`, `project_name`, `no_project`) VALUES ('','$project_name','$no_project')");
+function addDataProcess($fpr_no,$date,$date_reqd,$division,$section,$area,$reqd_for,$id_project) {
+	$sendData = query("INSERT INTO `tb_fpr`(`id`, `fpr_no`, `date`,`date_reqd`,`division`,`section`,`area`,`reqd_for`, `reviewed`, `approved`, `proceed`,`project_id`) VALUES ('','$fpr_no','$date','$date_reqd','$division','$section','$area','$reqd_for','','','','$id_project')");
 	if($sendData){
-		redirect(base_path);
+		redirect(base_path."/key-".$id_project);
 	}
 }
 
 //===Generate Form to edit data in database
 function editData($val) {
-	$receiveData = query("SELECT * FROM `tb_project`");
+	$receiveData = query("SELECT * FROM `tb_fpr` where `id`=$val");
 	while ($data = fetchQuery($receiveData)) {
 		$id = $data['id'];
-		$project_name = $data['project_name'];
-		$no_project = $data['no_project'];
+		$fpr_no = $data['fpr_no'];
+		$date = $data['date'];
+		$date_reqd = $data['date_reqd'];
+		$division = $data['division'];
+		$section = $data['section'];
+		$area = $data['area'];
+		$reqd_for = $data['reqd_for'];
 	}
 	echo "
-		<form action='' method='POST' name='form-add'>
-			<div>
-				<label>No. Project</label>
-		  		<input type='text' name='no_project' placeholder='Please fill this field with new project name' required autofocus value='".$no_project."'>
-			</div>
-			<div>
-				<label>Project Name</label>
-			  	<input type='text' name='project_name' placeholder='Please fill this field with new project name' required value='".$project_name."'>
-			</div>
-			<div>
-				<input type='hidden' name='id_project' value='".$id."'> 
-			  	<input type='submit' name='button_edit' value='Update this Project'>
-			  	<a href='".BASE_URL."/".base_path."/remove/".$id."' class='remove-link'>Remove</a>
-			</div>
-		</form>
+	<form action='' method='POST' name='form-add'>
+		<div>
+			<label>FPR No.</label>
+				<input type='text' name='fpr_no' placeholder='Please fill this field with New No FPR' required autofocus value='".$fpr_no."'>
+		</div>
+		<div>
+			<label>Date</label>
+				<input type='date' name='date' placeholder='Please fill this field with Date' required value='".$date."'>
+		</div>
+		<div>
+			<label>Date ReqD</label>
+				<input type='date' name='date_reqd' placeholder='Please fill this field with Date ReqD' required value='".$date_reqd."'>
+		</div>
+		<div>
+			<label>Division</label>
+				<input type='text' name='division' placeholder='Please fill this field with new Division' required value='".$division."'>
+		</div>
+		<div>
+			<label>Section</label>
+				<input type='text' name='section' placeholder='Please fill this field with new Section' required value='".$section."'>
+		</div>
+		<div>
+			<label>Area</label>
+				<input type='text' name='area' placeholder='Please fill this field with new Area' required value='".$area."'>
+		</div>
+		<div>
+			<label>ReqD For</label>
+				<input type='text' name='reqd_for' placeholder='Please fill this field with new ReqD For' required value='".$reqd_for."'>
+		</div>
+		<div>
+			<input type='hidden' name='id_project' value='".$id."'>
+				<input type='submit' name='button_edit' value='Update this Project'>
+				<a href='".BASE_URL."/".base_path."/remove/".$id."' class='remove-link'>Remove</a>
+		</div>
+	</form>
 	";
 }
 
 //===Process of edit data in database
-function editDataProcess($id_project,$project_name,$no_project) {
-	$sendData = query("UPDATE `tb_project` SET `project_name` = '$project_name', `no_project` = '$no_project' WHERE `tb_project`.`id` = $id_project;");
+function editDataProcess($fpr_no,$date,$date_reqd,$division,$section,$area,$reqd_for,$id_project,$val) {
+	$sendData = query("UPDATE `tb_fpr` SET `fpr_no`='$fpr_no', `date`='$date', `date_reqd`='$date_reqd', `division`='$division', `section`='$section',`area`='$area',`reqd_for`='$reqd_for' WHERE `tb_fpr`.`id` = '$val'");
 	if($sendData){
-		redirect(base_path);
+		redirect(base_path."/key-".$id_project);
 	}
 }
 
 //===Process to remove data in database
-function removeData($id_project) {
-	$sendData = query( "DELETE FROM `tb_project` WHERE `tb_project`.`id` = $id_project");
+function removeData($id_project,$val) {
+	$sendData = query( "DELETE FROM `tb_fpr` WHERE `tb_fpr`.`id` = '$val'");
 	if($sendData){
-		redirect(base_path);
+		redirect(base_path."/key-".$id_fpr);
 	}
-}	
+}
 
 
 ?>

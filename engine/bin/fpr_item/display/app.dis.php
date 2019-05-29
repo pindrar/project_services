@@ -4,7 +4,7 @@
 	<title><?php getTitle($request) ?></title>
 </head>
 <body>
-	<?php 
+	<?php
 	generateHeader($id_fpr);
 	render($id_fpr,$opt,$val,$page);
 	?>
