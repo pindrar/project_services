@@ -17,3 +17,5 @@ RewriteRule ^([^/]*)/key-([0-9]+)/([a-z]+)/([0-9]+)/?$ /project_services/config/
 RewriteRule ^([^/]*)/key-([0-9]+)/([0-9]+)/?$ /project_services/config/routes.php?req=$1&key=$2&page=$3 [L,QSA]
 
 RewriteRule ^([^/]*)/([a-z]+)/([0-9]+)/([0-9]+)/?$ /project_services/config/routes.php?req=$1&opt=$2&val=$3&page=$4 [L,QSA]
+
+RewriteRule ^([^/]*)/([a-z]+)/([0-9]+)/([0-9]+)/?$ /project_services/config/routes.php?req=$1&opt=$2&val=$3&opt=$4&val=$5[L,QSA]

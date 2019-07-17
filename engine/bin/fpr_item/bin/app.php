@@ -30,6 +30,9 @@ editDataProcess($material_code,$qty,$unit,$description,$size,$unit_price,$amount
 //===This function called when website loaded
 function render($id_fpr,$opt,$val,$page) {
 	switch ($opt) {
+		case 'sent':
+			sentData($val);
+			break;
 		case 'add':
 			addData();
 			break;
@@ -56,9 +59,7 @@ function generateHeader($id_fpr) {
 		$date = $data['date'];
 		$date_reqd = $data['date_reqd'];
 		$division = $data['division'];
-		$section = $data['section'];
 		$area = $data['area'];
-		$reqd_for = $data['reqd_for'];
 	}
 
 	$receiveData = query("SELECT * FROM `tb_project` where id=$id_project");
@@ -118,6 +119,7 @@ function viewData($id_fpr,$page) {
 	}
 	echo "</table>";
 	echo "<td><a href='".$_SERVER['REQUEST_URI']."/add' class='add-icon'>Add Data</a></td>";
+	echo "<td><a href='".$_SERVER['REQUEST_URI']."/sent' class='add-icon'>Kirim FPR</a></td>";
 }
 
 ///========Beloman
@@ -222,7 +224,12 @@ function editData($val) {
 	";
 }
 
-//===Process of edit data in database
+function sentData($val){
+echo "<h1>data berhasil di simpan</h1>";
+echo "<td><a href=".BASE_URL."/homepage>kembali</a>";
+}
+
+ //===Process of edit data in database
 function editDataProcess($material_code,$qty,$unit,$description,$size,$unit_price,$amount,$id_fpr,$val) {
 
 	$sendData = query("UPDATE `tb_fpr_item` SET `material_code`='$material_code',`qty`='$qty',`unit`='$unit',`description`='$description',`size`='$size',`unit_price`='$unit_price',`amount`='$amount' WHERE `tb_fpr_item`.`id` = $val;");

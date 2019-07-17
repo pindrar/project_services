@@ -45,7 +45,6 @@ while($data = fetchQuery($receiveData)) {
             $count404++;
         }
     }
-
 }
 
 if ($count404 == 0){
